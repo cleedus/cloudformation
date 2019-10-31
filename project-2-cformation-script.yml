@@ -1,5 +1,12 @@
-Parameters:
 # whatever you consider a changing value, put it as a parameter instead of hard-coding it into your script
+Parameters:
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+    VpcCIDR: 
+        Description: Please enter the IP range (CIDR notation) for this VPC
+        Type: String
+        Default: 10.0.0.0/16
 Resources:
   #instace profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
   ProfileWithRolesForOurApp:
