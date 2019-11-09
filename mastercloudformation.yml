@@ -1,6 +1,48 @@
 Parameters:
 # whatever you consider a changing value, put it as a parameter instead of hard-coding it into your script
+  EnvironmentName:
+    Description: Name prefixed to resource
+    Type: String  
 Resources:
+  LBSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+    GroupDescription: Allows http connection to load balancer
+    SecurityGroupEgress: 
+    - IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      CidrIp: 0.0.0.0/0
+    SecurityGroupIngress: 
+    - IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      CidrIp: 0.0.0.0/0
+    VpcId:
+      Fn::ImportValue:
+        !Sub "${EnvironmentName}-VPCID"
+  WebServerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+    GroupDescription: Allows http connection to host
+    SecurityGroupEgress: 
+    - IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: 0.0.0.0/0
+    SecurityGroupIngress: 
+    - IpProtocol: tcp
+      FromPort: 8080
+      ToPort: 8080
+      CidrIp: 0.0.0.0/0
+    - IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      CidrIp: 0.0.0.0/0  
+    VpcId:
+      Fn::ImportValue:
+        !Sub "${EnvironmentName}-VPCID"
+
   #instace profile contains the IAM Role name(s) that we want to associate to our auto scaling EC2 Servers
   ProfileWithRolesForOurApp:
     Type: AWS::IAM::InstanceProfile
@@ -9,12 +51,12 @@ Resources:
         - Project2S3ReadOnlyEC2
   
           #!/bin/bash
-          apt-get update -y
+          apt-get update -y 
           apt-get install unzip awscli -y
           apt-get install apache2 -y
           systemctl start apache2.service
           cd /var/www/html
           aws s3 cp s3://project2-website/website.zip
           unzip -o website.zip
-  Outputs: 
+ Outputs: 
   #Bonus points for useful outputs!
