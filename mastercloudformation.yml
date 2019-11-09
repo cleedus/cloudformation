@@ -4,6 +4,11 @@ Parameters:
     Description: An environment name that will be prefixed to resource names
     Type: String
 Resources:
+  IamRoleWithS3Role:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles:
+        - Project2S3ReadOnlyEC2
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -46,3 +51,25 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: 0.0.0.0/0
+  ServerLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install unzip awscli -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          aws s3 cp s3:project2-website/website.zip
+          unzip -o website.zip
+      ImageId: ami-06d51e91cea0dac8d
+      IamInstanceProfile: !Ref IamRoleWithS3Role
+      SecurityGroups:
+      - Ref: InstanceSecurityGroup
+      InstanceType: t3.medium
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: '10'
