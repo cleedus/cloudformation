@@ -74,7 +74,7 @@ Resources:
           !Sub "${EnvironmentName}-PRIV-NETS"
       LaunchConfigurationName: 
         Ref: "ServerLaunchConfig"
-      MinSize: "2"
+      MinSize: "4"
       MaxSize: "4"
       TargetGroupARNs:
       - Ref: WebAppTargetGroup
