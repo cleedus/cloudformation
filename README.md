@@ -5,4 +5,4 @@
 # Description
 This repo contains a CloudFormation script that provisions deployment resources and deploys a high-availability web app in Amazon Private Cloud. Within the VPC, there are two availability zones with public and private subnets. To ensure better fault tolerance and availability, it leverages a Load Balancer and an Autoscaling Group to spin up a minimum of two servers in the private subnet in each availability zone.
 
-Access to resources are controlled through Security Groups, NAT Gateways, and Route Tables. Servers have unstricted access to the internet, but go through the NAT Gateways. Servers are also given IAM role to download resources stored in the restricted S3 bucket.
+Access to resources are controlled through Security Groups, NAT Gateways, and Route Tables. Servers have unrestricted access to the internet, but go through the NAT Gateways. Servers are also given IAM role to download resources stored in the restricted S3 bucket.
