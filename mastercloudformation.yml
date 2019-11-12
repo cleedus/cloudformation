@@ -57,7 +57,6 @@ Resources:
           aws s3 cp s3://project2-website/website.zip . # "." copy to current directly
           unzip -o website.zip
       ImageId: ami-06d51e91cea0dac8d
-      KeyName: serviceBrokerKey
       IamInstanceProfile: !Ref IamRoleWithS3Role
       SecurityGroups:
       - Ref: InstanceSecurityGroup
